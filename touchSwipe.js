@@ -13,7 +13,7 @@
 			'show':true,
 			'transTime':.3,
 			'transType':'ease',
-			'direction':'Y'
+			'direction':'X'
 		};
 
 		this.autoDis = 50;
@@ -107,9 +107,11 @@
 			if(_self.options.direction == 'X' && Math.abs(_self.moveDisX) > Math.abs(_self.moveDisY)){
 				_self.direction = -_self.listWidth*_self.moveCount-_self.moveDisX;
 				_self.translate3d(_self.direction,0);
+				console.log(_self.moveCount)
 			}else if(_self.options.direction == 'Y' && Math.abs(_self.moveDisX) < Math.abs(_self.moveDisY)){
-				_self.direction = -_self.listWidth*_self.moveCount-_self.moveDisY;
+				_self.direction = -_self.listHeight*_self.moveCount-_self.moveDisY;
 				_self.translate3d(0,_self.direction);
+				console.log(_self.moveCount)
 			}
 
 			_self.transition(_self.options.transTime,_self.options.transType);
