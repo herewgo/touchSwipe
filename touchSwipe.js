@@ -14,7 +14,7 @@
 			'transTime':.3,
 			'transType':'ease'
 		};
-		
+
 		this.autoDis = 50;
 		this.Targetnode = _$('.t-slider');
 		this.moveDistance = 0;
@@ -36,7 +36,7 @@
 			this.touchEnd();
 		}
 	}
-
+	//初始化滑动样式
 	TouchSlider.prototype.setInitSize = function(){
 
 		this.listWidth = _$('.slider-list').offsetWidth;
@@ -52,20 +52,20 @@
 		}
 
 	}
-
+	//封装触摸监听事件
 	TouchSlider.prototype.touchEvent = function(node,eventType,callback){
 		node.addEventListener(eventType,callback);
 	}
-
+	//触摸开始
 	TouchSlider.prototype.touchStart = function(){
 		var _self = this;
 
 		this.touchEvent(_self.Targetnode,'touchstart',function(e){
 			e.preventDefault();
-			_self.X = e.touches[0].pageX;
+			_self.X = e.touches[0].pageX;//获取初始触摸点
 		})
 	}
-
+	//触摸过程
 	TouchSlider.prototype.touchMove = function(){
 
 		var _self = this,
@@ -77,9 +77,9 @@
 
 			_self.isSwipe=1;
 
-			_self.distanceX = e.touches[0].pageX;
+			_self.distanceX = e.touches[0].pageX;//获取移动的触摸点
 
-			_self.moveX = _self.X-_self.distanceX;
+			_self.moveX = _self.X-_self.distanceX;//计算出手指滑动距离
 
 			resultX = -_self.listWidth*_self.moveCount-_self.moveX;
 
@@ -89,18 +89,18 @@
 		})
 
 	}
-
+	//触摸结束
 	TouchSlider.prototype.touchEnd = function(){
 
 		var _self = this;
 
 		this.touchEvent(_self.Targetnode,'touchend',function(e){
 			e.preventDefault();
-
+			//判断滑动方向
 			 if ( _self.moveX > _self.autoDis && _self.isSwipe==1) {
 
 			   _self.moveCount++;
-
+			   //边界检测
 			   if(_self.moveCount >= _$$('.slider-list').length){
 			    	_self.translate3d(-_self.listWidth*(_$$('.slider-list').length-1),0);
 			    	_self.transition(_self.options.transTime,_self.options.transType);
@@ -132,13 +132,13 @@
 		})
 
 	}
-
+	//给滑动设置编号
 	TouchSlider.prototype.setIndex = function(node){
 		for(var i = 0;i<node.length;i++){
 			node[i].setAttribute('data-index',i);
 		}
 	}
-
+	//样式处理
 	TouchSlider.prototype.translate3d = function(x,y){
 
 		var _self = this;
@@ -146,7 +146,7 @@
 		_self.Targetnode.style.webkitTransform = 'translate3d('+x+'px,'+y+'px,0px)';
 		_self.Targetnode.style.transform = 'translate3d('+x+'px,'+y+'px,0px)';
 	}
-
+	//样式处理
 	TouchSlider.prototype.transition = function(time,type){
 
 		var _self = this;
@@ -157,11 +157,11 @@
 	}
 
 	var $$ = {};
-
+	//类型检测
 	var isObj = function (o) {
         return Object.prototype.toString.call(o) === "[object Object]";
     }
-
+    //组件默认参数传递
 	$$.extend = function(defaultObj,obj){
 		if (isObj(obj)) {
             for (var i in obj) {
@@ -169,10 +169,10 @@
             }
         }
 	} 
-
+	//全局暴露组件接口
 	window.touchSlider = function(options){
 		var slider = new TouchSlider();
-		
+
 		$$.extend(slider.options,options);
 
 		slider.init();
