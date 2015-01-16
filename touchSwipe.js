@@ -11,7 +11,10 @@
 	var TouchSlider = function(){
 		this.options = {
 			'show':true,
+			'transTime':.3,
+			'transType':'ease'
 		};
+		
 		this.autoDis = 50;
 		this.Targetnode = _$('.t-slider');
 		this.moveDistance = 0;
@@ -81,6 +84,7 @@
 			resultX = -_self.listWidth*_self.moveCount-_self.moveX;
 
 			_self.translate3d(resultX,0);
+			_self.transition(_self.options.transTime,_self.options.transType);
 
 		})
 
@@ -99,9 +103,11 @@
 
 			   if(_self.moveCount >= _$$('.slider-list').length){
 			    	_self.translate3d(-_self.listWidth*(_$$('.slider-list').length-1),0);
+			    	_self.transition(_self.options.transTime,_self.options.transType);
 			    	_self.moveCount = (_$$('.slider-list').length-1);
 			    }else{
 			    	_self.translate3d(-_self.listWidth*_self.moveCount,0);
+			    	_self.transition(_self.options.transTime,_self.options.transType);
 			    }
 			   
 			   _self.isSwipe=0;
@@ -116,6 +122,7 @@
 			    }
 			    else{
 			    	_self.translate3d(-_self.listWidth*_self.moveCount,0);
+			    	_self.transition(_self.options.transTime,_self.options.transType);
 			    }
 
 		       _self.isSwipe=0;
@@ -140,13 +147,22 @@
 		_self.Targetnode.style.transform = 'translate3d('+x+'px,'+y+'px,0px)';
 	}
 
-	var $ = {};
+	TouchSlider.prototype.transition = function(time,type){
+
+		var _self = this;
+
+		_self.Targetnode.style.webkitTransition= 'all '+time+'s '+type+'';
+		_self.Targetnode.style.transition = 'all '+time+'s '+type+'';
+
+	}
+
+	var $$ = {};
 
 	var isObj = function (o) {
         return Object.prototype.toString.call(o) === "[object Object]";
     }
 
-	$.extend = function(defaultObj,obj){
+	$$.extend = function(defaultObj,obj){
 		if (isObj(obj)) {
             for (var i in obj) {
                 defaultObj[i] = obj[i];
@@ -157,7 +173,7 @@
 	window.touchSlider = function(options){
 		var slider = new TouchSlider();
 		
-		$.extend(slider.options,options);
+		$$.extend(slider.options,options);
 
 		slider.init();
 	}
