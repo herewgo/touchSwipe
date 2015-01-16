@@ -12,25 +12,16 @@
 		this.options = {
 			'show':true,
 			'transTime':.3,
-			'transType':'ease',
-			'direction':'Y'
+			'transType':'ease'
 		};
 
 		this.autoDis = 50;
 		this.Targetnode = _$('.t-slider');
+		this.moveDistance = 0;
 		this.moveCount = 0;
-
-		//触摸开始点
-		this.startDisX = 0;
-		this.startDisY = 0;
-		//触摸滑动距离
-		this.moveDisX = 0;
-		this.moveDisY = 0;
-		//触摸滑动开始距离
-		this.moveStartX = 0;
-		this.moveStartY = 0;
-
-		this.direction = 0;
+		this.X = 0;
+		this.moveX = 0;
+		this.distanceX = 0;
 		this.listWidth = null;
 		this.listHeight = null;
 		this.isSwipe = 0;
@@ -49,8 +40,7 @@
 	//初始化滑动样式
 	TouchSlider.prototype.setInitSize = function(){
 
-		this.listWidth = _$('.slider-list').offsetWidth;
-		this.listHeight  = _$('.slider-list').offsetHeight;
+		this.listWidth = _$('.slider-list').offsetHeight;
 
 		for(var i = 0;i<_$$('.slider-list').length;i++){
 
@@ -58,13 +48,8 @@
 
 			var index = _$$('.slider-list')[i].getAttribute('data-index');
 
-			if(this.options.direction == 'X'){
-				_$$('.slider-list')[i].style.webkitTransform = 'translate3d('+(this.listWidth*index)+'px,0px,0px)';
-				_$$('.slider-list')[i].style.transform = 'translate3d('+(this.listWidth*index)+'px,0px,0px)';
-			}else if(this.options.direction == 'Y'){
-				_$$('.slider-list')[i].style.webkitTransform = 'translate3d(0px,'+(this.listHeight*index)+'px,0px)';
-				_$$('.slider-list')[i].style.transform = 'translate3d(0px,'+(this.listHeight*index)+'px,0px)';
-			}
+			_$$('.slider-list')[i].style.webkitTransform = 'translate3d(0px,'+(this.listWidth*index)+'px,0px)';
+			_$$('.slider-list')[i].style.transform = 'translate3d(0px,'+(this.listWidth*index)+'px,0px)';
 		}
 
 	}
@@ -78,17 +63,14 @@
 
 		this.touchEvent(_self.Targetnode,'touchstart',function(e){
 			e.preventDefault();
-
-			_self.startDisX = e.touches[0].pageX;
-			_self.startDisY = e.touches[0].pageY;
-			//获取初始触摸点
+			_self.X = e.touches[0].pageY;//获取初始触摸点
 		})
 	}
 	//触摸过程
 	TouchSlider.prototype.touchMove = function(){
 
 		var _self = this,
-			result;
+			resultX;
 
 		this.touchEvent(_self.Targetnode,'touchmove',function(e){
 
@@ -96,22 +78,13 @@
 
 			_self.isSwipe=1;
 
-			_self.moveStartX = e.touches[0].pageX;
-			_self.moveStartY = e.touches[0].pageY;
-			//获取移动的触摸点
+			_self.distanceX = e.touches[0].pageY;//获取移动的触摸点
 
-			_self.moveDisX = _self.startDisX-_self.moveStartX;
-			_self.moveDisY = _self.startDisY-_self.moveStartY;
-			//计算出手指滑动距离
+			_self.moveX = _self.X-_self.distanceX;//计算出手指滑动距离
 
-			if(_self.options.direction == 'X' && Math.abs(_self.moveDisX) > Math.abs(_self.moveDisY)){
-				_self.direction = -_self.listWidth*_self.moveCount-_self.moveDisX;
-				_self.translate3d(_self.direction,0);
-			}else if(_self.options.direction == 'Y' && Math.abs(_self.moveDisX) < Math.abs(_self.moveDisY)){
-				_self.direction = -_self.listWidth*_self.moveCount-_self.moveDisY;
-				_self.translate3d(0,_self.direction);
-			}
+			resultX = -_self.listWidth*_self.moveCount-_self.moveX;
 
+			_self.translate3d(0,resultX);
 			_self.transition(_self.options.transTime,_self.options.transType);
 
 		})
@@ -125,43 +98,23 @@
 		this.touchEvent(_self.Targetnode,'touchend',function(e){
 			e.preventDefault();
 			//判断滑动方向
-			var moveDis = _self.options.direction == 'X'?_self.moveDisX:_self.moveDisY;
-			var moveSingle = _self.options.direction == 'X'?_self.listWidth:_self.listHeight;
-
-			 if ( moveDis > _self.autoDis) {
+			 if ( _self.moveX > _self.autoDis && _self.isSwipe==1) {
 
 			   _self.moveCount++;
 			   //边界检测
 			   if(_self.moveCount >= _$$('.slider-list').length){
-
-			   		if(_self.options.direction == 'X'){
-
-						_self.translate3d(-moveSingle*(_$$('.slider-list').length-1),0);
-
-					}else if(_self.options.direction == 'Y'){
-
-						_self.translate3d(0,-moveSingle*(_$$('.slider-list').length-1));
-					}
-
+			    	_self.translate3d(0,-_self.listWidth*(_$$('.slider-list').length-1));
 			    	_self.transition(_self.options.transTime,_self.options.transType);
 			    	_self.moveCount = (_$$('.slider-list').length-1);
-
 			    }else{
-
-			    	if(_self.options.direction == 'X'){
-
-						_self.translate3d(-moveSingle*_self.moveCount,0);
-
-					}else if(_self.options.direction == 'Y'){
-
-						_self.translate3d(0,-moveSingle*_self.moveCount);
-					}
-
+			    	_self.translate3d(0,-_self.listWidth*_self.moveCount);
 			    	_self.transition(_self.options.transTime,_self.options.transType);
 			    	_self.addCurClass();
 			    }
+			   
+			   _self.isSwipe=0;
 		       
-		    }else if(moveDis < -_self.autoDis){
+		    }else if(_self.moveX < -_self.autoDis && _self.isSwipe==1){
 
 		    	_self.moveCount--;
 
@@ -171,19 +124,12 @@
 			    	_self.addCurClass();
 			    }
 			    else{
-
-			    	if(_self.options.direction == 'X'){
-
-						_self.translate3d(-moveSingle*_self.moveCount,0);
-
-					}else if(_self.options.direction == 'Y'){
-
-						_self.translate3d(0,-moveSingle*_self.moveCount);
-					}
-		
+			    	_self.translate3d(0,-_self.listWidth*_self.moveCount);
 			    	_self.transition(_self.options.transTime,_self.options.transType);
 			    	_self.addCurClass();
 			    }
+
+		       _self.isSwipe=0;
 
 		    }
 
@@ -196,7 +142,6 @@
 			node[i].setAttribute('data-index',i);
 		}
 	}
-
 	//样式处理
 	TouchSlider.prototype.translate3d = function(x,y){
 
