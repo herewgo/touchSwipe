@@ -57,4 +57,4 @@
 
 >demo预览地址（扫描二维码查看）
 
-{<2>}![测试二维码](http://www.wangwenyu.com//content/images/2015/01/ZWB7H-S4-9--BWG-U4--COJ.jpg)
+![测试二维码](http://www.wangwenyu.com//content/images/2015/01/ZWB7H-S4-9--BWG-U4--COJ.jpg)
