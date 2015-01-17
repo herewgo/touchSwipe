@@ -21,13 +21,13 @@
 2.基本HTML结构如下：要保证类名的准确无误
 
 		<!-- touchSlider start -->
-		<div class="slider">
-			<ul class="t-slider">
-				<li class="slider-list slider-list-1">
+		<div class="swipe">
+			<ul class="t-swipe">
+				<li class="swipe-list swipe-list-1">
 				</li>
-				<li class="slider-list slider-list-2">
+				<li class="swipe-list swipe-list-2">
 				</li>
-				<li class="slider-list slider-list-3">
+				<li class="swipe-list swipe-list-3">
 				</li>
 			</ul>
 		</div>
@@ -36,7 +36,7 @@
  3.调用方法：
  在刚刚引入的script文件下一行键入
  
- 		touchSlider({
+ 		touchSwipe({
 			'show':true,
 			'transTime':.3,
 			'transType':'ease-in',
