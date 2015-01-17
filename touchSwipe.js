@@ -33,7 +33,6 @@
 		this.direction = 0;
 		this.listWidth = null;
 		this.listHeight = null;
-		this.isSwipe = 0;
 	}
 
 
@@ -93,8 +92,6 @@
 		this.touchEvent(_self.Targetnode,'touchmove',function(e){
 
 			e.preventDefault();
-
-			_self.isSwipe=1;
 
 			_self.moveStartX = e.touches[0].pageX;
 			_self.moveStartY = e.touches[0].pageY;
