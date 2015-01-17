@@ -1,5 +1,5 @@
 # touchSwipe v1.0
-手机端轮播
+移动端滑动组件 touchSwipe
 >更新信息
 
 2015-01-16
