@@ -8,7 +8,7 @@
 		return document.querySelectorAll(selector)
 	}
 
-	var TouchSlider = function(){
+	var TouchSwipe = function(){
 		this.options = {
 			'show':true,
 			'transTime':.3,
@@ -37,7 +37,7 @@
 	}
 
 
-	TouchSlider.prototype.init = function(){
+	TouchSwipe.prototype.init = function(){
 		if(this.options.show){
 			this.setInitSize();
 			this.initAddClass();
@@ -47,33 +47,33 @@
 		}
 	}
 	//初始化滑动样式
-	TouchSlider.prototype.setInitSize = function(){
+	TouchSwipe.prototype.setInitSize = function(){
 
-		this.listWidth = _$('.slider-list').offsetWidth;
-		this.listHeight  = _$('.slider-list').offsetHeight;
+		this.listWidth = _$('.swipe-list').offsetWidth;
+		this.listHeight  = _$('.swipe-list').offsetHeight;
 
-		for(var i = 0;i<_$$('.slider-list').length;i++){
+		for(var i = 0;i<_$$('.swipe-list').length;i++){
 
-			this.setIndex(_$$('.slider-list'));
+			this.setIndex(_$$('.swipe-list'));
 
-			var index = _$$('.slider-list')[i].getAttribute('data-index');
+			var index = _$$('.swipe-list')[i].getAttribute('data-index');
 
 			if(this.options.direction == 'X'){
-				_$$('.slider-list')[i].style.webkitTransform = 'translate3d('+(this.listWidth*index)+'px,0px,0px)';
-				_$$('.slider-list')[i].style.transform = 'translate3d('+(this.listWidth*index)+'px,0px,0px)';
+				_$$('.swipe-list')[i].style.webkitTransform = 'translate3d('+(this.listWidth*index)+'px,0px,0px)';
+				_$$('.swipe-list')[i].style.transform = 'translate3d('+(this.listWidth*index)+'px,0px,0px)';
 			}else if(this.options.direction == 'Y'){
-				_$$('.slider-list')[i].style.webkitTransform = 'translate3d(0px,'+(this.listHeight*index)+'px,0px)';
-				_$$('.slider-list')[i].style.transform = 'translate3d(0px,'+(this.listHeight*index)+'px,0px)';
+				_$$('.swipe-list')[i].style.webkitTransform = 'translate3d(0px,'+(this.listHeight*index)+'px,0px)';
+				_$$('.swipe-list')[i].style.transform = 'translate3d(0px,'+(this.listHeight*index)+'px,0px)';
 			}
 		}
 
 	}
 	//封装触摸监听事件
-	TouchSlider.prototype.touchEvent = function(node,eventType,callback){
+	TouchSwipe.prototype.touchEvent = function(node,eventType,callback){
 		node.addEventListener(eventType,callback);
 	}
 	//触摸开始
-	TouchSlider.prototype.touchStart = function(){
+	TouchSwipe.prototype.touchStart = function(){
 		var _self = this;
 
 		this.touchEvent(_self.Targetnode,'touchstart',function(e){
@@ -85,7 +85,7 @@
 		})
 	}
 	//触摸过程
-	TouchSlider.prototype.touchMove = function(){
+	TouchSwipe.prototype.touchMove = function(){
 
 		var _self = this,
 			result;
@@ -105,13 +105,15 @@
 			//计算出手指滑动距离
 
 			if(_self.options.direction == 'X' && Math.abs(_self.moveDisX) > Math.abs(_self.moveDisY)){
+
 				_self.direction = -_self.listWidth*_self.moveCount-_self.moveDisX;
 				_self.translate3d(_self.direction,0);
-				console.log(_self.moveCount)
+
 			}else if(_self.options.direction == 'Y' && Math.abs(_self.moveDisX) < Math.abs(_self.moveDisY)){
+
 				_self.direction = -_self.listHeight*_self.moveCount-_self.moveDisY;
 				_self.translate3d(0,_self.direction);
-				console.log(_self.moveCount)
+
 			}
 
 			_self.transition(_self.options.transTime,_self.options.transType);
@@ -120,7 +122,7 @@
 
 	}
 	//触摸结束
-	TouchSlider.prototype.touchEnd = function(){
+	TouchSwipe.prototype.touchEnd = function(){
 
 		var _self = this;
 
@@ -134,19 +136,19 @@
 
 			   _self.moveCount++;
 			   //边界检测
-			   if(_self.moveCount >= _$$('.slider-list').length){
+			   if(_self.moveCount >= _$$('.swipe-list').length){
 
 			   		if(_self.options.direction == 'X'){
 
-						_self.translate3d(-moveSingle*(_$$('.slider-list').length-1),0);
+						_self.translate3d(-moveSingle*(_$$('.swipe-list').length-1),0);
 
 					}else if(_self.options.direction == 'Y'){
 
-						_self.translate3d(0,-moveSingle*(_$$('.slider-list').length-1));
+						_self.translate3d(0,-moveSingle*(_$$('.swipe-list').length-1));
 					}
 
 			    	_self.transition(_self.options.transTime,_self.options.transType);
-			    	_self.moveCount = (_$$('.slider-list').length-1);
+			    	_self.moveCount = (_$$('.swipe-list').length-1);
 
 			    }else{
 
@@ -193,14 +195,14 @@
 
 	}
 	//给滑动设置编号
-	TouchSlider.prototype.setIndex = function(node){
+	TouchSwipe.prototype.setIndex = function(node){
 		for(var i = 0;i<node.length;i++){
 			node[i].setAttribute('data-index',i);
 		}
 	}
 
 	//样式处理
-	TouchSlider.prototype.translate3d = function(x,y){
+	TouchSwipe.prototype.translate3d = function(x,y){
 
 		var _self = this;
 
@@ -208,7 +210,7 @@
 		_self.Targetnode.style.transform = 'translate3d('+x+'px,'+y+'px,0px)';
 	}
 	//样式处理
-	TouchSlider.prototype.transition = function(time,type){
+	TouchSwipe.prototype.transition = function(time,type){
 
 		var _self = this;
 
@@ -216,18 +218,18 @@
 		_self.Targetnode.style.transition = 'all '+time+'s '+type+'';
 
 	}
-
-	TouchSlider.prototype.initAddClass = function(){
-		_$$('.slider-list')[0].classList.add('cur');
+	//初始激活样式
+	TouchSwipe.prototype.initAddClass = function(){
+		_$$('.swipe-list')[0].classList.add('cur');
 	}
-
-	TouchSlider.prototype.addCurClass = function(){
+	//添加激活样式
+	TouchSwipe.prototype.addCurClass = function(){
 
 		var _self = this;
-		for(var i = 0;i<_$$('.slider-list').length;i++){
-			_$$('.slider-list')[i].classList.remove('cur');
+		for(var i = 0;i<_$$('.swipe-list').length;i++){
+			_$$('.swipe-list')[i].classList.remove('cur');
 		}
-		_$$('.slider-list')[_self.moveCount].classList.add('cur');
+		_$$('.swipe-list')[_self.moveCount].classList.add('cur');
 	}
 
 	var $$ = {};
@@ -244,12 +246,12 @@
         }
 	} 
 	//全局暴露组件接口
-	window.touchSlider = function(options){
-		var slider = new TouchSlider();
+	window.TouchSwipe = function(options){
+		var swipe = new TouchSwipe();
 
-		$$.extend(slider.options,options);
+		$$.extend(swipe.options,options);
 
-		slider.init();
+		swipe.init();
 	}
 
 })()
