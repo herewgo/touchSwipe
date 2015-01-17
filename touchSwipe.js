@@ -17,7 +17,7 @@
 		};
 
 		this.autoDis = 50;
-		this.Targetnode = _$('.t-slider');
+		this.Targetnode = _$('.t-swipe');
 		this.moveCount = 0;
 
 		//触摸开始点
@@ -246,7 +246,7 @@
         }
 	} 
 	//全局暴露组件接口
-	window.TouchSwipe = function(options){
+	window.touchSwipe = function(options){
 		var swipe = new TouchSwipe();
 
 		$$.extend(swipe.options,options);
