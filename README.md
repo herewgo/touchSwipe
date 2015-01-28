@@ -20,7 +20,7 @@
         
 2.基本HTML结构如下：要保证类名的准确无误
 
-		<!-- touchSlider start -->
+		<!-- touchSwipe start -->
 		<div class="swipe">
 			<ul class="t-swipe">
 				<li class="swipe-list swipe-list-1">
@@ -31,7 +31,7 @@
 				</li>
 			</ul>
 		</div>
-	    <!-- touchSlider stop -->
+	    <!-- touchSwipe stop -->
         
  3.调用方法：
  在刚刚引入的script文件下一行键入
